@@ -25,6 +25,11 @@ fn main() {
         vec![0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         vec![0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         vec![0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        vec![0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        vec![0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        vec![0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        vec![0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        vec![0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     ];
     let mut next_map = curr_map.clone();
 
@@ -33,17 +38,14 @@ fn main() {
     let dir_rows: Vec<i32> = vec![-1, -1, -1, 0, 0, 1, 1, 1];
     let dir_cols: Vec<i32> = vec![-1, 0, 1, -1, 1, -1, 0, 1];
 
-    let iterations = 45;
-    for _ in 0..iterations {
+    let iterations: u32 = 200;
+    for i in 0..=iterations {
         for r in 0..rows {
             for c in 0..cols {
                 let mut num_living_neighbors = 0;
                 for d in 0..8 {
                     let rr: i32 = r + dir_rows[d];
                     let cc: i32 = c + dir_cols[d];
-                    // if r == 1 && c == 3 {
-                    //     print!("({},{})", rr, cc);
-                    // }
                     if 0 <= rr
                         && rr < rows
                         && 0 <= cc
@@ -51,14 +53,8 @@ fn main() {
                         && curr_map[rr as usize][cc as usize] == 1
                     {
                         num_living_neighbors += 1;
-                        // print!("({},{})", rr, cc);
                     }
-                    // println!();
                 }
-                // if r == 1 && c == 3 {
-                //     println!("{}", num_living_neighbors);
-                // }
-                // next_map[r as usize][c as usize] = num_living_neighbors;
                 if curr_map[r as usize][c as usize] == 1
                     && (num_living_neighbors == 2 || num_living_neighbors == 3)
                 {
@@ -72,15 +68,15 @@ fn main() {
         }
         // Display
         println!("\x1B[2J");
-        print_map(&next_map);
-        std::thread::sleep(std::time::Duration::new(0, 150000000));
+        print_map(&next_map, i, iterations);
+        std::thread::sleep(std::time::Duration::new(0, 30000000));
 
         // Advance
         curr_map = next_map.clone();
     }
 }
 
-fn print_map(xs: &Vec<Vec<i32>>) {
+fn print_map(xs: &Vec<Vec<i32>>, iter_num: u32, total_iters: u32) {
     for row in xs {
         for elt in row {
             if *elt == 0 {
@@ -92,4 +88,5 @@ fn print_map(xs: &Vec<Vec<i32>>) {
         println!();
     }
     println!();
+    println!("{}/{} iterations", iter_num, total_iters);
 }
