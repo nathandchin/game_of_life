@@ -1,10 +1,36 @@
+use clap::Parser;
 use macroquad::prelude::*;
+
+#[derive(Parser, Debug)]
+struct Args {
+    // The file to load
+    #[clap(short, long)]
+    file: String,
+
+    #[clap(short, long, require_equals = true, possible_values = &["1", "2", "3", "4", "5"])]
+    speed: String,
+}
 
 type LifeGrid = Vec<Vec<i32>>;
 
 #[macroquad::main("BasicShapes")]
 async fn main() {
-    let mut map1: LifeGrid = parse_file("data/glidergun");
+    let args = Args::parse();
+    let mut filepath = "data/".to_owned();
+    filepath.push_str(&args.file);
+
+    let slowdown_factor = match args.speed.as_str() {
+        "1" => 7,
+        "2" => 5,
+        "3" => 3,
+        "4" => 2,
+        "5" => 1,
+
+        // Should be impossible due to clap's handling of possible values
+        _ => panic!("Error: speed_factor must be between 1 and 5, inclusive"),
+    };
+
+    let mut map1: LifeGrid = parse_file(&filepath);
     let mut map2: LifeGrid = map1.clone();
 
     let width = map1[0].len() as f32 * 10.0;
@@ -19,7 +45,7 @@ async fn main() {
         macroquad::window::request_new_screen_size(width, height);
         clear_background(BLACK);
 
-        if i % 3 == 0 {
+        if i % slowdown_factor == 0 {
             advance_map(&mut map1, &mut map2, rows, cols);
         }
 
