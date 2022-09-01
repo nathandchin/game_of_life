@@ -4,7 +4,7 @@ type LifeGrid = Vec<Vec<i32>>;
 
 #[macroquad::main("BasicShapes")]
 async fn main() {
-    let mut map1: LifeGrid = parse_file("data/glidergun.txt");
+    let mut map1: LifeGrid = parse_file("data/glidergun");
     let mut map2: LifeGrid = map1.clone();
 
     let width = map1[0].len() as f32 * 10.0;
