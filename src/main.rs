@@ -4,8 +4,7 @@ type LifeGrid = Vec<Vec<i32>>;
 
 #[macroquad::main("BasicShapes")]
 async fn main() {
-
-    let mut map1: LifeGrid = parse_file("data/r_pentomino.txt");
+    let mut map1: LifeGrid = parse_file("data/glidergun.txt");
     let mut map2: LifeGrid = map1.clone();
 
     let width = map1[0].len() as f32 * 10.0;
@@ -15,7 +14,7 @@ async fn main() {
 
     println!("Grid dimensions: H: {}, W: {}", rows, cols);
 
-    let mut i: u32 = 0;
+    let mut i: u64 = 0;
     loop {
         macroquad::window::request_new_screen_size(width, height);
         clear_background(BLACK);
@@ -32,6 +31,8 @@ async fn main() {
             }
         }
 
+        draw_text(&i.to_string(), 0.0, height, 20.0, WHITE);
+
         i += 1;
         next_frame().await
     }
@@ -39,7 +40,7 @@ async fn main() {
 
 fn parse_file(filename: &str) -> Vec<Vec<i32>> {
     let contents = std::fs::read_to_string(filename);
-    let s =match contents {
+    let s = match contents {
         Ok(s) => s,
         Err(e) => panic!("{}", e),
     };
@@ -92,23 +93,7 @@ fn advance_map(curr_map: &mut LifeGrid, next_map: &mut LifeGrid, rows: i32, cols
                 next_map[r as usize][c as usize] = 0;
             }
         }
-
     }
     // Advance
     *curr_map = next_map.clone();
-}
-
-fn _print_map(xs: &Vec<Vec<i32>>, iter_num: u32, total_iters: u32) {
-    for row in xs {
-        for elt in row {
-            if *elt == 0 {
-                print!("░░");
-            } else {
-                print!("██");
-            }
-        }
-        println!();
-    }
-    println!();
-    println!("{}/{} iterations", iter_num, total_iters);
 }
