@@ -7,4 +7,3 @@ edition = "2021"
 
 [dependencies]
 macroquad = "0.3.23"
-async-std = "1.12.0"
