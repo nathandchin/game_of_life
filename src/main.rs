@@ -16,8 +16,7 @@ type LifeGrid = Vec<Vec<i32>>;
 #[macroquad::main("BasicShapes")]
 async fn main() {
     let args = Args::parse();
-    let mut filepath = "data/".to_owned();
-    filepath.push_str(&args.file);
+    let filepath = &args.file;
 
     let slowdown_factor = match args.speed.as_str() {
         "1" => 7,
