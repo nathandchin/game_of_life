@@ -7,7 +7,7 @@ struct Args {
     #[clap(short, long)]
     file: String,
 
-    #[clap(short, long, require_equals = true, possible_values = &["1", "2", "3", "4", "5"])]
+    #[clap(short, long, possible_values = &["1", "2", "3", "4", "5"])]
     speed: String,
 }
 
