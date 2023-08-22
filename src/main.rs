@@ -3,12 +3,20 @@ use macroquad::prelude::*;
 
 #[derive(Parser, Debug)]
 struct Args {
-    // The file to load
-    #[clap(short, long)]
+    /// The file to load
+    #[arg(short, long)]
     file: String,
 
-    #[clap(short, long, possible_values = &["1", "2", "3", "4", "5"])]
+    /// The speed of the simulation
+    #[arg(
+        short,
+        long,
+        value_parser = clap::builder::PossibleValuesParser::new(["1", "2", "3", "4", "5"]))]
     speed: String,
+
+    /// Wheter or not to draw grid lines
+    #[arg(short, long, default_value = "false")]
+    draw_grid: bool,
 }
 
 type LifeGrid = Vec<Vec<i32>>;
@@ -46,6 +54,15 @@ async fn main() {
 
         if i % slowdown_factor == 0 {
             advance_map(&mut map1, &mut map2, rows, cols);
+        }
+
+        if args.draw_grid {
+            for r in (0..rows * 10).step_by(10) {
+                draw_line(0.0, r as f32, width, r as f32, 0.4, WHITE);
+            }
+            for c in (0..cols * 10).step_by(10) {
+                draw_line(c as f32, 0.0, c as f32, height, 0.4, WHITE);
+            }
         }
 
         for (r, row) in map2.iter().enumerate() {
